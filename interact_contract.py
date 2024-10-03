@@ -1,4 +1,5 @@
 import asyncio
+from data import NFTCreateRequest
 from neo3.core import types
 from neo3.api.wrappers import ChainFacade, NEP11NonDivisibleContract as ContractWrapper
 from neo3.api.helpers.signing import sign_insecure_with_account
@@ -8,7 +9,7 @@ from neo3.contracts import nef, manifest
 from neo3.wallet import utils
 
 
-async def main():
+async def interact_with_nft_contract(nft_requeest: NFTCreateRequest)->str:
    
     facade = ChainFacade.node_provider_testnet()  
 
@@ -23,12 +24,9 @@ async def main():
     account_password = "%S9!CVY1b%NsMr"
     account = Account.from_wif(account_wif, account_password)
 
-
     # Load your contract
     contract_hash = types.UInt160.from_string("0x4d75de76165349c200239dded6e72ba1ba26bc6d")
     contract = ContractWrapper(contract_hash)
-
-   
 
     # Add signer to the facade
     facade.add_signer(
@@ -57,11 +55,11 @@ async def main():
     if success:
         print("NFT minted successfully")
     else:
-        print("Failed to mint NFT")
+        return ("Failed to mint NFT")
 
     # Get the symbol of the NFT
     symbol_result = await facade.test_invoke(contract.symbol)
-    print(f"NFT Symbol: {symbol_result.stack_item}")
+    return f"NFT Symbol: {symbol_result.stack_item}"
 
 if __name__ == "__main__":
     asyncio.run(main()) 
