@@ -1,0 +1,2 @@
+neo-mamba==2.6.0
+fastapi==0.115.0
